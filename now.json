@@ -18,5 +18,8 @@
     },
     { "src": "^/.*", "methods": ["POST"], "dest": "main.exe" }
   ],
-  "comm": [{ "src": "^(/static/.*)", "dest": "build/$1" }]
+  "comm": [{ "src": "^(/static/.*)", "dest": "build/$1" }],
+  "github": {
+    "silent": true
+  }
 }
