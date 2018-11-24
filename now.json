@@ -19,7 +19,7 @@
     {
       "src": "^/graphql$",
       "methods": ["GET"],
-      "dest": "/build/graphiql.html"
+      "dest": "/graphiql.html"
     },
     { "src": "^/.*", "methods": ["POST"], "dest": "main.exe" }
   ],
