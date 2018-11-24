@@ -1,0 +1,22 @@
+{
+  "name": "reason-graphql-experiment",
+  "alias": "reason-graphql-experiment",
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.exe",
+      "use": "now-static-bin",
+      "config": { "port": 8080, "timeout": 1000 }
+    },
+    { "src": "build/**", "use": "@now/static" }
+  ],
+  "routes": [
+    {
+      "src": "^/(.*)",
+      "methods": ["GET"],
+      "dest": "/build/$1"
+    },
+    { "src": "^/.*", "methods": ["POST"], "dest": "main.exe" }
+  ],
+  "comm": [{ "src": "^(/static/.*)", "dest": "build/$1" }]
+}

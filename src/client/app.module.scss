@@ -1,0 +1,11 @@
+.todo {
+  display: flex;
+  background-color: white;
+  cursor: pointer;
+  flex-direction: row;
+  padding: 10px;
+
+  &:hover {
+    background-color: #eee;
+  }
+}

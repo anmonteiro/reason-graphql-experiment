@@ -1,0 +1,45 @@
+{
+  "name": "example",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "ocaml": "^4.7.2",
+    "@opam/menhir": "*",
+    "@opam/dune": "*",
+    "@opam/fmt": "*",
+    "@opam/logs": "*",
+    "@opam/lwt": "*",
+    "@opam/yojson": "*",
+    "@opam/easy-format": "*",
+    "@opam/alcotest": "*",
+    "@opam/httpaf": "*",
+    "@opam/httpaf-lwt": "*",
+    "@opam/conf-libev": "*",
+    "@opam/graphql": "*",
+    "@opam/graphql-lwt": "*",
+    "@opam/websocket-httpaf": "*",
+    "@opam/websocket-httpaf-lwt": "*",
+    "@opam/subscriptions-transport-ws": "*",
+    "@opam/subscriptions-transport-ws-lwt": "*",
+    "@esy-ocaml/reason": "3.3.5"
+  },
+  "devDependencies": {
+
+  },
+  "resolutions": {
+    "@opam/httpaf": "anmonteiro/httpaf:httpaf.opam#anmonteiro/wait-for-first-flush",
+    "@opam/httpaf-lwt": "anmonteiro/httpaf:httpaf-lwt.opam#lwt+62",
+    "@opam/graphql": "anmonteiro/ocaml-graphql-server:graphql.opam#anm",
+    "@opam/graphql-lwt": "anmonteiro/ocaml-graphql-server:graphql-lwt.opam#anm",
+    "@opam/websocket-httpaf": "anmonteiro/websocket-httpaf:websocket-httpaf.opam#23c7017",
+    "@opam/websocket-httpaf-lwt": "anmonteiro/websocket-httpaf:websocket-httpaf-lwt.opam#23c7017",
+    "@opam/subscriptions-transport-ws": "anmonteiro/ocaml-subscriptions-transport-ws:subscriptions-transport-ws.opam#master",
+    "@opam/subscriptions-transport-ws-lwt": "anmonteiro/ocaml-subscriptions-transport-ws:subscriptions-transport-ws-lwt.opam#master"
+  },
+  "esy": {
+    "sandboxEnv": {
+      "C_INCLUDE_PATH": "/Users/anmonteiro/.nix-profile/include",
+      "LIBRARY_PATH": "/Users/anmonteiro/.nix-profile/lib"
+    }
+  }
+}

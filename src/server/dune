@@ -1,0 +1,39 @@
+(executable
+ (name main)
+ (public_name graphql)
+ (modules Schema Httpaf_utils Httpaf_server Main)
+ (libraries shared
+            lwt
+            lwt.unix
+            logs
+            logs.lwt
+            logs.fmt
+            fmt.tty
+            cohttp
+            graphql-lwt
+            httpaf-lwt
+            websocket-httpaf-lwt
+            subscriptions-transport-ws-lwt
+            uri
+            yojson))
+
+(env
+ (dev (flags (:standard -g)))
+ (docker (flags (:standard -ccopt -static))))
+
+(alias
+ (name graphql)
+ (deps main.exe))
+
+(executable
+ (name proxy)
+ (public_name proxy)
+ (modules proxy)
+ (libraries lwt
+            lwt.unix
+            cohttp
+            cohttp-lwt-unix
+            uri
+            yojson))
+
+

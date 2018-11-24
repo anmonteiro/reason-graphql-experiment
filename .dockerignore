@@ -1,0 +1,15 @@
+_esy
+_build
+_opam
+demo.gif
+node_modules
+yarn.lock
+LICENSE
+README.md
+graphql-csv
+sample.csv
+foo.re
+lib
+index.html
+build
+server.esy.lock*
