@@ -33,9 +33,3 @@ FROM scratch
 WORKDIR /graphql
 
 COPY --from=base /graphql/main.exe main.exe
-
-# COPY --from=base /graphql/public public
-
-EXPOSE 8080
-
-CMD ["./main.exe"]
