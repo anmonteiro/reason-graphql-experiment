@@ -6,9 +6,6 @@
 # testing
 /coverage
 
-# production
-/build
-
 # bucklescript
 /lib
 /types
@@ -30,6 +27,5 @@ yarn-error.log*
 _build
 /**/.merlin
 
-/build
 /_esy
 /.graphql_ppx_cache
