@@ -1,0 +1,11 @@
+lib: [
+  "/Users/anmonteiro/Documents/github/reason-graphql-experiment/_esy/server/store/b/reason_graphql_experiment-1c5f841c/install/default/lib/reason-graphql-experiment/META" {"META"}
+  "/Users/anmonteiro/Documents/github/reason-graphql-experiment/_esy/server/store/b/reason_graphql_experiment-1c5f841c/install/default/lib/reason-graphql-experiment/opam" {"opam"}
+]
+bin: [
+  "/Users/anmonteiro/Documents/github/reason-graphql-experiment/_esy/server/store/b/reason_graphql_experiment-1c5f841c/install/default/bin/graphql" {"graphql"}
+]
+doc: [
+  "/Users/anmonteiro/Documents/github/reason-graphql-experiment/_esy/server/store/b/reason_graphql_experiment-1c5f841c/install/default/doc/reason-graphql-experiment/LICENSE"
+  "/Users/anmonteiro/Documents/github/reason-graphql-experiment/_esy/server/store/b/reason_graphql_experiment-1c5f841c/install/default/doc/reason-graphql-experiment/README.md"
+]

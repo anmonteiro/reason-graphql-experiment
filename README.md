@@ -4,8 +4,6 @@ This is an example of a fullstack Reason + GraphQL application that uses a nativ
 backend and a client compiled to JavaScript through BuckleScript, whilst sharing
 types between the backend and the frontend.
 
-<img src="./demo.gif">
-
 ## Technologies / Libraries:
 
 This was initially based on [@jaredly](https://github.com/jaredly)'s
@@ -21,14 +19,11 @@ OCaml / Reason types (have a look in [`src/shared`](./src/shared)).
 
 ### Build the front-end
 
-- `yarn && yarn build && yarn bundle`
+- `yarn && yarn build`
 
 ### Build and run the backend
 
-**Note**: _it's a quiet startup; check http://localhost:8080/graphql to see that it's running!_
-
 - `npm install -g esy`
-- `esy @server`
 - `esy @server x graphql`
 
 ## Neat tricks

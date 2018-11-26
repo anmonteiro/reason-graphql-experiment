@@ -12,8 +12,6 @@
             cohttp
             graphql-lwt
             httpaf-lwt
-            websocket-httpaf-lwt
-            subscriptions-transport-ws-lwt
             uri
             yojson))
 
@@ -24,16 +22,3 @@
 (alias
  (name graphql)
  (deps main.exe))
-
-(executable
- (name proxy)
- (public_name proxy)
- (modules proxy)
- (libraries lwt
-            lwt.unix
-            cohttp
-            cohttp-lwt-unix
-            uri
-            yojson))
-
-

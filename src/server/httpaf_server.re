@@ -1,11 +1,7 @@
 open Httpaf;
 open Lwt.Infix;
 
-module Websocket = Websocket_httpaf_lwt;
-
 module GraphQLSchema = Graphql_lwt.Schema;
-
-let client = ref([]);
 
 let serveStatic = (reqd, base, path) => {
   let fname = Filename.concat(base, path);
@@ -121,135 +117,7 @@ let execute_request = (reqd, ctx, schema) => {
   Body.schedule_read(request_body, ~on_read, ~on_eof);
 };
 
-
-/* let execute_request = (reqd, ctx, schema) => {
-  let request = Reqd.request(reqd);
-  Lwt_io.eprintlf(
-    "version: %s; headers: %s",
-    Version.to_string(request.version),
-    Headers.to_string(request.headers),
-  )
-  |> ignore;
-  let request_body = Reqd.request_body(reqd);
-
-  let response_content_type =
-    switch (Headers.get(request.headers, "Content-Type")) {
-    | Some(request_content_type) => request_content_type
-    | None => "application/octet-stream"
-    };
-
-  let response =
-    Response.create(
-      ~headers=Headers.of_list([("Content-Type", response_content_type)]),
-      `OK,
-    );
-
-  let response_body = Reqd.respond_with_streaming(reqd, response);
-
-  let rec respond = () =>
-    Body.schedule_read(
-      request_body,
-      ~on_eof=() => Body.close_writer(response_body),
-      ~on_read=
-        (request_data, ~off, ~len) => {
-          let body_str = Httpaf.Bigstring.to_string(~off, ~len, request_data);
-          [>Lwt_io.printlf("Body: %s", body_str) |> ignore;<]
-          let json = Yojson.Basic.from_string(body_str);
-          let query =
-            Yojson.Basic.(json |> Util.member("query") |> Util.to_string);
-          let vars =
-            try (Yojson.Basic.Util.(json |> member("variables") |> to_assoc)) {
-            | _ => []
-            };
-          [>Lwt_io.printlf("Query: %s", query) |> ignore;<]
-          let result =
-            execute_query(
-              ctx,
-              schema,
-              ~variables=(
-                vars :> list((string, Graphql_parser.const_value))
-              ),
-              query,
-            );
-          result
-          >>= (
-            fun
-            | Ok(response) =>
-              switch (response) {
-              | `Response(data) =>
-                let body = Yojson.Basic.to_string(data);
-                Lwt.return(Body.write_string(response_body, body));
-              | `Stream(_stream) => assert(false)
-              }
-            | Error(err) =>
-              Lwt.return(
-                Httpaf_utils.respond_with_error(
-                  reqd,
-                  Yojson.Basic.to_string(err),
-                ),
-              )
-          )
-          |> ignore;
-
-          respond();
-        },
-    );
-
-  respond();
-};
- */
-module MySubscriptionManager = {
-  type t = Hashtbl.t(string, unit => unit);
-
-  let subscriptions = t => t;
-
-  let add = Hashtbl.add;
-
-  let create = n => Hashtbl.create(n);
-
-  let remove = Hashtbl.remove;
-
-  let iter = Hashtbl.iter;
-
-  let find_opt = Hashtbl.find_opt;
-
-  let mem = Hashtbl.mem;
-
-  let clear = Hashtbl.clear;
-};
-
-module Subscriptions =
-  Subscriptions_transport_ws_lwt.Make(MySubscriptionManager);
-
-let subscriptions = MySubscriptionManager.create(10);
-
-let upgrade_connection = (ctx, schema, reqd, fd) => {
-  let _x = 1;
-  Websocket.upgrade_connection(
-    reqd,
-    fd,
-    ~headers=
-      Httpaf.Headers.of_list([("sec-websocket-protocol", "graphql-ws")]),
-    Subscriptions.on_recv(
-      ~subscribe=execute_query(ctx, schema),
-      ~push_to_websocket=lazy (List.hd(client^)),
-      subscriptions,
-    ),
-  )
-  >>= (
-    ((_resp, _body, push_to_websocket)) =>
-      Lwt_io.eprintlf("DUDDEEEEEEE...")
-      >>= (
-        () => {
-          client := [push_to_websocket];
-          /* Httpaf.Body.flush(body, () => ()) [> Httpaf.Body.close_writer(body) <]; */
-          Lwt.return_unit;
-        }
-      )
-  );
-};
-
-let mk_callback = (reqd, mk_context, schema, flow) => {
+let mk_callback = (reqd, mk_context, schema) => {
   let {Httpaf.Request.target, meth, _} as request = Reqd.request(reqd);
   let req_path = target |> Uri.of_string |> Uri.path;
   Format.printf("Req: %a\n%!", Httpaf.Request.pp_hum, request);
@@ -352,8 +220,6 @@ let mk_callback = (reqd, mk_context, schema, flow) => {
     /* Body.flush(response_body, () => ()); */
     Body.schedule_read(~on_read, ~on_eof, request_body);
     finished;
-  | (`GET, ["ws"]) =>
-    upgrade_connection(mk_context(request), schema, reqd, flow)
   | (`GET, ["graphql"]) => serveStatic(reqd, "./build", "graphiql.html")
   | (`POST, ["graphql"]) =>
     execute_request(reqd, mk_context(request), schema);
@@ -366,12 +232,12 @@ let mk_callback = (reqd, mk_context, schema, flow) => {
   };
 };
 
-let mk_connection_handler = (mk_context, schema, flow) => {
+let mk_connection_handler = (mk_context, schema) => {
   let connection_handler: (Unix.sockaddr, Lwt_unix.file_descr) => Lwt.t(unit) = {
     let request_handler: (Unix.sockaddr, Reqd.t(_)) => unit =
       (_client_address, request_descriptor) =>
         Lwt.async(() =>
-          mk_callback(request_descriptor, mk_context, schema, flow)
+          mk_callback(request_descriptor, mk_context, schema)
         );
 
     let error_handler:
@@ -409,35 +275,15 @@ let mk_connection_handler = (mk_context, schema, flow) => {
   connection_handler;
 };
 
-/* let start = (~port=8080, ~ctx, schema) => {
-     let server =
-       Conduit_lwt_unix.serve(
-         ~ctx=Conduit_lwt_unix.default_ctx,
-         ~mode=`TCP(`Port(port)),
-         (flow, _ic, _oc) => {
-           let connection_handler = mk_connection_handler(ctx, schema, flow);
-           switch (flow) {
-           | TCP({fd, ip, port}) =>
-             connection_handler(
-               Unix.(ADDR_INET(Ipaddr_unix.to_inet_addr(ip), port)),
-               fd,
-             )
-           | _ => assert(false)
-           };
-         },
-       );
-
-     Lwt_main.run(server);
-   }; */
-
 let start = (~port=8080, ~ctx, schema) => {
-  let listen_address = Unix.(ADDR_INET(inet_addr_any, port));
+  let listen_address = Unix.(ADDR_INET(inet_addr_loopback, port));
 
   Lwt.async(() =>
-    Lwt_io.establish_server_with_client_socket(listen_address, (addr, fd) =>
-      mk_connection_handler(ctx, schema, fd, addr, fd)
+    Lwt_io.establish_server_with_client_socket(
+      listen_address,
+      mk_connection_handler(ctx, schema),
     )
-    >>= (_server => Lwt.return_unit)
+    >>= (_server => Lwt_io.printlf("Server started on port: %d", port))
   );
 
   let (forever, _) = Lwt.wait();

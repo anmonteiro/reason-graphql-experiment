@@ -1,7 +1,3 @@
-try (Lwt_engine.(set((new libev)(~backend=Ev_backend.kqueue, ())))) {
-| _ => Lwt_engine.(set((new libev)(~backend=Ev_backend.epoll, ())))
-};
-
 let setup_log = (style_renderer, level) => {
   Fmt_tty.setup_std_outputs(~style_renderer?, ());
   Logs.set_level(level);

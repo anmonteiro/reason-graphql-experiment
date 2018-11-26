@@ -1,5 +1,5 @@
 {
-  "name": "foo",
+  "name": "reason-graphql-experiment",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -70,7 +70,7 @@
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.2",
     "bs-fetch": "^0.3.0",
-    "bs-glamor": "^0.2.0",
+    "bs-glamor": "github:anmonteiro/bs-glamor#patch-1",
     "bs-platform": "^4.0.5",
     "graphql_ppx": "^0.2.7",
     "reason-react": "^0.5.3"
