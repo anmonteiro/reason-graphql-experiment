@@ -24,6 +24,7 @@ OCaml / Reason types (have a look in [`src/shared`](./src/shared)).
 ### Build and run the backend
 
 - `npm install -g esy`
+- `esy @server`
 - `esy @server x graphql`
 
 ## Neat tricks

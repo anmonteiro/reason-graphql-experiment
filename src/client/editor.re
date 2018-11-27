@@ -1,8 +1,6 @@
 let style = ReactDOMRe.Style.make;
 
-let evtValue = event => ReactDOMRe.domElementToObj(
-                          ReactEventRe.Form.target(event),
-                        )##value;
+let evtValue = event => event->ReactEvent.Form.target##event;
 
 type retainedProps = string;
 
@@ -27,7 +25,7 @@ let make = (~value, ~onChange, ~placeholder, ~className="", ~clear=false, _) => 
         className
         onClick=(
           evt => {
-            ReactEventRe.Mouse.stopPropagation(evt);
+            evt->ReactEvent.Mouse.stopPropagation;
             send(_ => Some(value));
           }
         )>
@@ -45,10 +43,10 @@ let make = (~value, ~onChange, ~placeholder, ~className="", ~clear=false, _) => 
             send(_ => Some(value));
           }
         )
-        onClick=(evt => ReactEventRe.Mouse.stopPropagation(evt))
+        onClick=(evt => evt->ReactEvent.Mouse.stopPropagation)
         onKeyDown=(
           evt =>
-            switch (ReactEventRe.Keyboard.key(evt)) {
+            switch (ReactEvent.Keyboard.key(evt)) {
             | "Enter" =>
               if (text == value) {
                 send(_ => None);
