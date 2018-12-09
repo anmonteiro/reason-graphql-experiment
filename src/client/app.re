@@ -21,7 +21,7 @@ module TodoItem = {
                     ])
                   )
         onClick=onToggle>
-        <input _type="checkbox" defaultChecked=item.completed />
+        <input type_="checkbox" defaultChecked=item.completed />
         <div style=(style(~flexBasis="10px", ())) />
         <Editor value=item.title placeholder="" onChange=onEdit />
       </div>,
