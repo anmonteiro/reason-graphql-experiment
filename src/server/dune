@@ -9,9 +9,9 @@
             logs.lwt
             logs.fmt
             fmt.tty
-            cohttp
             graphql-lwt
             httpaf-lwt
+            str
             uri
             yojson))
 

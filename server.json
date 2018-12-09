@@ -13,13 +13,12 @@
     "@opam/httpaf-lwt": "*",
     "@opam/graphql": "*",
     "@opam/graphql-lwt": "*",
-    "@opam/reason": "^3.3.7"
+    "@opam/reason": "^3.3.7",
+    "@opam/uri": "*"
   },
   "resolutions": {
     "@opam/httpaf": "inhabitedtype/httpaf:httpaf.opam#master",
-    "@opam/httpaf-lwt": "aantron/httpaf:httpaf-lwt.opam#lwt",
-    "@opam/graphql": "andreas/ocaml-graphql-server:graphql.opam#master",
-    "@opam/graphql-lwt": "andreas/ocaml-graphql-server:graphql-lwt.opam#master"
+    "@opam/httpaf-lwt": "aantron/httpaf:httpaf-lwt.opam#lwt"
   },
   "esy": {
     "build": "dune build"

@@ -29,3 +29,4 @@ _build
 
 /_esy
 /.graphql_ppx_cache
+*.install
